@@ -1,0 +1,117 @@
+8 bit mul:       
+
+LDA 4200h        
+MOV B A         
+LDA 4201h        
+MOV D A          
+MVI A 00h       
+L1: ADD B
+DCR D
+JNZ L1
+STA 4203
+HLT  
+
+ Ip:
+
+ 4200  02
+ 4201  04
+ Op:
+ 4202  00 
+ 4203  08       
+
+8 bit div:        
+ 
+LDA 4201h           
+MOV B A            
+LDA 4200h        
+MVI C 00h          
+AGAIN: CMP B       
+JC STORE
+SUB B
+INR C
+JMP AGAIN
+STORE: STA 4203h
+MOV A C
+STA 4202h
+HLT
+
+ Ip:
+4200  06   
+4201  02
+ Op:
+4202  03
+4203  00
+
+16 bit add:       
+
+MVI B 00h          
+LHLD 4200h         
+XCHG             
+LHLD 4202h         
+DAD D              
+JNC SKIP
+INR B
+SKIP: SHLD 4204h
+MOV A B
+STA 4206h
+HLT
+ 
+Ip:
+
+4200  20
+4202  30
+ Op:
+ 4204  50
+ 4206  00
+
+16 bit sub :    
+
+LHLD 9000h        
+XCHG              
+LHLD 9002h      
+MOV A E           
+SUB L
+MOV L A
+MOV A D
+SBB H
+MOV H A
+SHLD 9004h
+HLT
+
+Ip:
+9000  08
+9002  05
+Op:
+9004  03
+
+  
+16 bit mul: 
+
+LDA 4200h
+MOV E A
+LDA 4201h
+MOV B A
+LXI H 0000h
+MVI D 00h
+NEXT: DAD D
+DCR B
+JNZ NEXT
+SHLD 4202h
+HLT   
+
+ IP:
+4200  03
+4201  03
+ OP:
+4202  09 
+4203  00
+
+
+ 
+
+
+ 
+
+
+
+
